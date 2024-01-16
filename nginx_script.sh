@@ -229,6 +229,9 @@ cd /etc/nginx/snippets/
 
 wget https://github.com/srsamuka/nginx/blob/main/ssl-params.conf
 
+cp /etc/nginx/conf/nginx.conf  /etc/nginx/conf/nginx.conf.bak
+
+nginx -t
 
 : <<'END_COMMENT'
 pid=$!
