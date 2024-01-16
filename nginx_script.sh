@@ -51,7 +51,7 @@ simple_blue_echo() {
 MESSAGE="Installing pre-req for Nginx 1.12.2" ; simple_green_echo
 echo
 
-yum install -y wget openssl openssl-devel zlib gcc etcd perl perl-devel perl-ExtUtils-Embed GeoIP GeoIP-devel libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel
+yum install -y wget openssl openssl-devel zlib gcc etcd perl perl-devel perl-ExtUtils-Embed GeoIP GeoIP-devel libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel telnet
 
 
 echo "" &&
