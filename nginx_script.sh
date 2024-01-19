@@ -51,7 +51,7 @@ simple_blue_echo() {
 MESSAGE="Installing pre-req for Nginx 1.12.2" ; simple_green_echo
 echo
 
-yum install -y wget openssl openssl-devel zlib gcc etcd perl perl-devel perl-ExtUtils-Embed GeoIP GeoIP-devel libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel telnet
+yum install -y wget openssl openssl-devel zlib gcc etcd perl perl-devel perl-ExtUtils-Embed GeoIP GeoIP-devel libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel nginx-all-modules
 
 
 echo "" &&
@@ -126,7 +126,9 @@ wget http://www.openssl.org/source/openssl-1.0.2k.tar.gz  && tar xzvf openssl-1.
 
 cd openssl-1.0.2k
 
-./Configure linux-x86_64 --prefix=/usr
+#./Configure  --prefix=/usr
+
+./config
 
 make & make install
 
@@ -177,6 +179,8 @@ cd nginx-1.12.2/
 
 make && make install
 
+cd /tmp
+
 rm *.tar.gz
 
 
@@ -212,7 +216,7 @@ openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 
 mkdir /etc/nginx/snippets
 
-echo -e "ssl_certificate /etc/ssl/certs/ewpschellmanco.crt\nssl_certificate_key /etc/ssl/private/ewpschellmanco.key" >> /etc/nginx/snippets/self-signed.conf
+echo -e "ssl_certificate /etc/ssl/certs/ewpschellmanco.crt;\nssl_certificate_key /etc/ssl/private/ewpschellmanco.key;" >> /etc/nginx/snippets/self-signed.conf
 
 if [ $? -eq 0 ];
 
@@ -227,11 +231,12 @@ echo "" &&
 
 cd /etc/nginx/snippets/
 
-wget https://github.com/srsamuka/nginx/blob/main/ssl-params.conf
+wget https://raw.githubusercontent.com/srsamuka/nginx/main/ssl-params.conf
 
 cp /etc/nginx/conf/nginx.conf  /etc/nginx/conf/nginx.conf.bak
 
 nginx -t
+
 
 : <<'END_COMMENT'
 pid=$!
