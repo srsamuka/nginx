@@ -221,9 +221,11 @@ sleep 1
 
 mkdir /etc/ssl/private
 
-openssl req -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/ewpschellmanco.key -out /etc/ssl/certs/ewpschellmanco.crt -subj "/C=US/ST=Arizona/L=Tempe/O=Schellman, Inc./OU=IT/CN=ewp.schellmanco.com"
+#openssl req -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/ewpschellmanco.key -out /etc/ssl/certs/ewpschellmanco.crt -subj "/C=US/ST=Arizona/L=Tempe/O=Schellman, Inc./OU=IT/CN=ewp.schellmanco.com"
 
-openssl dhparam -trustout -out /etc/ssl/certs/dhparam.pem 2048
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/ewpschellmanco.key -out /etc/ssl/certs/ewpschellmanco.crt -subj "/C=US/ST=Arizona/L=Tempe/O=Schellman, Inc./OU=IT/CN=ewp.schellmanco.com"
+
+openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 
 mkdir /etc/nginx/snippets
 
