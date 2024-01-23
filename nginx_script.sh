@@ -51,7 +51,7 @@ simple_blue_echo() {
 MESSAGE="Installing pre-req for Nginx 1.12.2" ; simple_green_echo
 echo
 
-yum install -y wget openssl openssl-devel zlib gcc etcd perl perl-devel perl-ExtUtils-Embed GeoIP GeoIP-devel libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel nginx-all-modules
+yum install -y wget openssl-devel zlib gcc etcd perl perl-devel perl-ExtUtils-Embed GeoIP GeoIP-devel libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel nginx-all-modules redhat-lsb
 
 
 echo "" &&
@@ -120,7 +120,7 @@ MESSAGE="Download and install OpenSSL HTTPs Module from source code" ; simple_gr
 echo
 sleep 1
 
-cd /tmp
+cd /opt
 
 wget http://www.openssl.org/source/openssl-1.0.2k.tar.gz  && tar xzvf openssl-1.0.2k.tar.gz
 
@@ -145,6 +145,8 @@ MESSAGE="Download and install PCRE dependency from source code" ; simple_green_e
 echo
 sleep 1
 
+cd /opt
+
 wget https://ftp.exim.org/pub/pcre/pcre-8.41.tar.gz  &&  tar xzvf pcre-8.41.tar.gz
 
 cd pcre-8.41
@@ -163,9 +165,6 @@ fi
 sleep 1
 echo "" &&
 
-cd /tmp
-
-rm *.tar.gz
 
 MESSAGE="Download, install and start Nginx from source code" ; simple_green_echo
 echo
@@ -175,24 +174,32 @@ wget http://nginx.org/download/nginx-1.12.2.tar.gz   && tar xzvf nginx-1.12.2.ta
 
 cd nginx-1.12.2/
 
-./configure
+#./configure
 
-make && make install
+#./configure --with-http_ssl_module --with-openssl=/tmp/openssl-1.0.2k/
 
-cd /tmp
+./configure --prefix=/usr/local/nginx --with-http_ssl_module
+
+make
+
+make install
+
+cd /opt
 
 rm *.tar.gz
 
-
 cp  /usr/local/nginx/sbin/nginx    /usr/sbin/
 
-nginx -v
+nginx -V
+sleep 0,5
+
+nginx -t
+sleep 0,5
 
 ln -s /usr/local/nginx/   /etc/nginx
 
 /usr/sbin/nginx
 
-curl -I http://127.0.0.1
 
 if [ $? -eq 0 ];
 
@@ -204,6 +211,10 @@ fi
 sleep 1
 echo "" &&
 
+
+curl -I http://127.0.0.1
+
+
 MESSAGE="Installing SSL/TLS and enforing HTTPS redirection" ; blue_echo
 echo
 sleep 1
@@ -212,7 +223,7 @@ mkdir /etc/ssl/private
 
 openssl req -new -newkey rsa:2048 -nodes -keyout /etc/ssl/private/ewpschellmanco.key -out /etc/ssl/certs/ewpschellmanco.crt -subj "/C=US/ST=Arizona/L=Tempe/O=Schellman, Inc./OU=IT/CN=ewp.schellmanco.com"
 
-openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+openssl dhparam -trustout -out /etc/ssl/certs/dhparam.pem 2048
 
 mkdir /etc/nginx/snippets
 
